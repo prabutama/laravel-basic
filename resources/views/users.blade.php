@@ -41,10 +41,37 @@
                                                 <td>
                                                     <a href="{{ route('user.edit', ['id' => $user->id]) }}"
                                                         class="btn btn-primary"><i class="fa fa-edit"></i>Edit</a>
-                                                    <a href="#" class="btn btn-danger"><i
-                                                            class="fa fa-delete"></i>Delete</a>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#confirmDeleteModal{{ $user->id }}"
+                                                        class="btn btn-danger"><i class="fa fa-delete"></i>Delete</a>
                                                 </td>
                                             </tr>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="confirmDeleteModal{{ $user->id }}">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">
+                                                                are you sure you want to delete
+                                                                <strong>{{ $user->name }}</strong>
+                                                            </h5>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal"><span>&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" class="btn btn-secondary text-white"
+                                                                    data-dismiss="modal">Cancel</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-danger">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         @endforeach
                                     </tbody>
                                 </table>

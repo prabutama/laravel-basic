@@ -44,4 +44,35 @@ class HomeController extends Controller
         User::create($data);
         return redirect()->route('user.index');
     }
+
+    public function edit(Request $request, $id)
+    {
+        $user = User::find($id);
+        return view('edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required',
+            'email'    => 'required|email',
+            'password' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                        ->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $data['name']      = $request->name;
+        $data['email']     = $request->email;
+        if ($request->password) {
+            $data['password']  = Hash::make($request->password);
+        }
+
+        User::whereId($id)->update($data);
+        return redirect()->route('user.index');
+    }
 }

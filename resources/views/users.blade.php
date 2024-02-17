@@ -39,8 +39,8 @@
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>
-                                                    <a href="#" class="btn btn-primary"><i
-                                                            class="fa fa-edit"></i>Edit</a>
+                                                    <a href="{{ route('user.edit', ['id' => $user->id]) }}"
+                                                        class="btn btn-primary"><i class="fa fa-edit"></i>Edit</a>
                                                     <a href="#" class="btn btn-danger"><i
                                                             class="fa fa-delete"></i>Delete</a>
                                                 </td>

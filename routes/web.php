@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [HomeController::class, 'dashboard']);
-Route::get('/users', [HomeController::class, 'users'])->name('user.index');
+Route::get('/users', [HomeController::class, 'users'])->name('user.index')->middleware('isLogin');
 
 Route::get('/create', [HomeController::class, 'create'])->name('user.create');
 Route::post('/create', [HomeController::class, 'store'])->name('user.store');
@@ -17,8 +17,8 @@ Route::put('/update/{id}', [HomeController::class, 'update'])->name('user.update
 
 Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('user.delete');
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('isVisitor');
+Route::post('/login', [LoginController::class, 'login'])->name('login')->middleware('isVisitor');
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 

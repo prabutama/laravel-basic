@@ -121,7 +121,7 @@
                                         <li>
                                             <form action="{{ route('logout') }}" method="POST">
                                                 @csrf
-                                                @if (Auth::user())
+                                                @if (Auth::check())
                                                     <button class="bg-transparent border-0" type="submit"><i
                                                             class="icon-key mr-2"></i><span>Logout</span></button>
                                                 @else
@@ -222,6 +222,14 @@
 
     <script src="/assets/js/dashboard/dashboard-1.js"></script>
     @if ($message = Session::get('error'))
+        {
+        <script>
+            Swal.fire(
+                '{{ $message }}',
+            );
+        </script>
+        }
+    @elseif($message = Session::get('success'))
         {
         <script>
             Swal.fire(

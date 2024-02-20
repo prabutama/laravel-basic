@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -13,10 +14,14 @@ class HomeController extends Controller
     {
         return view('dashboard');
     }
-    public function users()
+    public function users(Request $request)
     {
         $users = User::get();
-        return view('users', compact('users'));
+
+        if ($request->get('search')) {
+            $users = User::where('name', 'LIKE', '%' . $request->input('search') . '%')->get();
+        }
+        return view('users', compact('users', 'request'));
     }
     public function create()
     {
@@ -32,14 +37,22 @@ class HomeController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                        ->back()
-                        ->withErrors($validator)
-                        ->withInput();
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
         }
+
+
+        $photo = $request->file('photo');
+        $filename = date('Y-m-d') . $photo->getClientOriginalName();
+        $path = 'photo-users/' . $filename;
+
+        Storage::disk('public')->put($path, file_get_contents($photo));
 
         $data['name']      = $request->name;
         $data['email']     = $request->email;
         $data['password']  = Hash::make($request->password);
+        $data['image']     = $filename;
 
         User::create($data);
         return redirect()->route('user.index');
@@ -54,6 +67,7 @@ class HomeController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'photo'    => 'required|mimes:jpg,jpeg,png|max:2048',
             'name'     => 'required',
             'email'    => 'required|email',
             'password' => 'nullable',
@@ -61,10 +75,11 @@ class HomeController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                        ->back()
-                        ->withErrors($validator)
-                        ->withInput();
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
         }
+
 
         $data['name']      = $request->name;
         $data['email']     = $request->email;
@@ -76,7 +91,7 @@ class HomeController extends Controller
         return redirect()->route('user.index');
     }
 
-    public function destroy($id) 
+    public function destroy($id)
     {
         User::whereId($id)->delete();
         return redirect()->route('user.index');

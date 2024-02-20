@@ -74,21 +74,7 @@
                         <span class="toggle-icon"><i class="icon-menu"></i></span>
                     </div>
                 </div>
-                <div class="header-left">
-                    <div class="input-group icons">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
-                                    class="mdi mdi-magnify"></i></span>
-                        </div>
-                        <input type="search" class="form-control" placeholder="Search Dashboard"
-                            aria-label="Search Dashboard">
-                        <div class="drop-down animated flipInX d-md-none">
-                            <form action="#">
-                                <input type="text" class="form-control" placeholder="Search">
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="header-right px-5">
                     <ul class="clearfix d-flex align-items-center justify-content-center">
                         <li>
@@ -97,7 +83,7 @@
                         <li class="icons dropdown mx-4">
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
-                                <img src="assets/images/user/1.png" height="40" width="40" alt="">
+                                <img src="{{ Auth::user() ? asset('storage/photo-users/'.Auth::user()->image) : "assets/images/user/1.png"  }}" height="40" width="40" alt="">
                             </div>
                             <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-body">

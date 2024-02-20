@@ -18,8 +18,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="card-title">Users Table</h4>
+                                <div>
+                                    <form action="{{ route('user.index') }}">
+                                        <input type="text" name="search" id="search" value="{{ $request->get('search') }}">
+                                        <button type="submit">Search</button>
+                                    </form>
+                                </div>
                                 <a href={{ route('user.create') }} class="btn btn-primary">Add User</a>
                             </div>
                             <div class="table-responsive">
@@ -27,6 +33,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Photo</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Action</th>
@@ -36,6 +43,10 @@
                                         @foreach ($users as $user)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    <img src="{{ asset('/storage/photo-users/' . $user->image) }}"
+                                                        height="40" width="40" alt="" class="rounded-circle">
+                                                </td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>
@@ -60,7 +71,8 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="POST">
+                                                            <form action="{{ route('user.delete', ['id' => $user->id]) }}"
+                                                                method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="button" class="btn btn-secondary text-white"
